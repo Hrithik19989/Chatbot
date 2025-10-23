@@ -679,5 +679,4 @@ Query your uploaded documents using natural language.
    - Press **Enter** key (Shift+Enter for new line)
 4. Wait a few seconds for processing
 5. View the answer in the "Response" section below
-
-**Example Questions:**
+   
