@@ -1,0 +1,9 @@
+ web
+name: Chatbot-frontend
+env: static
+buildCommand: echo "No build needed"
+staticPublishPath: ./frontend
+routes:
+ rewrite
+source: /*
+destination: /index.html
