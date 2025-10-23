@@ -522,3 +522,162 @@ Want to improve this project?
 - [Google Gemini](https://ai.google.dev/)
 - [Pinecone](https://www.pinecone.io/)
 - [PyPDF2](https://pypdf2.readthedocs.io/)
+
+
+# System Architecture
+
+## Overview
+This RAG-based chatbot uses a modern tech stack to provide accurate, 
+context-aware responses to user queries based on uploaded PDF documents.
+
+## Architecture Diagram
+
+┌─────────────┐
+│   User      │
+│  (Browser)  │
+└──────┬──────┘
+       │
+       │ HTTPS
+       ▼
+┌──────────────────┐
+│   Frontend       │
+│  (HTML/CSS/JS)   │
+│  Static Site     │
+└──────┬───────────┘
+       │
+       │ REST API
+       ▼
+┌──────────────────┐
+│   Backend        │
+│  FastAPI Server  │
+│  Python 3.11     │
+└──────┬───────────┘
+       │
+       ├─────────────┐
+       │             │
+       ▼             ▼
+┌──────────┐   ┌─────────────┐
+│ ChromaDB │   │ Google      │
+│ Vector   │   │ Gemini API  │
+│ Database │   │ (AI Model)  │
+└──────────┘   └─────────────┘
+
+## Component Details
+
+### Frontend Layer
+- **Technology**: Vanilla HTML, CSS, JavaScript
+- **Hosting**: Render Static Site
+- **Features**:
+  - File upload with drag-and-drop
+  - Real-time query interface
+  - Response display with formatting
+  - Error handling and user feedback
+
+### Backend Layer
+- **Framework**: FastAPI
+- **Language**: Python 3.11
+- **Hosting**: Render Web Service
+- **Responsibilities**:
+  - PDF text extraction (PyMuPDF)
+  - Document chunking
+  - API request handling
+  - Vector database operations
+  - AI model integration
+
+### Vector Database
+- **Technology**: ChromaDB
+- **Purpose**: Store document embeddings for similarity search
+- **Features**:
+  - Automatic embedding generation
+  - Semantic search
+  - Metadata storage
+
+### AI Model
+- **Provider**: Google Gemini
+- **Model**: gemini-pro (or gemini-1.5-flash)
+- **Usage**:
+  - Generate embeddings for documents
+  - Generate contextual responses
+  - Natural language understanding
+
+## Data Flow
+
+### Upload Flow
+1. User uploads PDF via frontend
+2. Frontend sends file to backend /upload endpoint
+3. Backend extracts text using PyMuPDF
+4. Text is chunked into smaller segments
+5. Gemini API generates embeddings for chunks
+6. Embeddings stored in ChromaDB with metadata
+7. Success response sent to frontend
+
+### Query Flow
+1. User enters question in frontend
+2. Frontend sends query to backend /query endpoint
+3. Backend generates embedding for query
+4. ChromaDB performs similarity search
+5. Top relevant chunks retrieved
+6. Context + query sent to Gemini API
+7. AI generates response using retrieved context
+8. Response with sources sent to frontend
+9. Frontend displays answer and sources
+
+## Security Measures
+- API keys stored in environment variables
+- CORS configuration for frontend-backend communication
+- Input validation on all endpoints
+- HTTPS encryption in production
+- No sensitive data in client-side code
+
+## Scalability Considerations
+- Stateless backend design
+- Vector database for efficient retrieval
+- Async operations for better performance
+- Rate limiting on API endpoints
+- Caching for frequently accessed data
+
+# User Guide - RAG Document Q&A System
+
+## Getting Started
+
+### Accessing the Application
+Visit the live application at: [https://chatbot-f.onrender.com/]
+
+The application works on:
+- Desktop browsers (Chrome, Firefox, Safari, Edge)
+- Mobile browsers (iOS Safari, Android Chrome)
+- Tablets
+
+## Features Overview
+
+### 1. Document Upload
+Upload PDF documents to create your knowledge base.
+
+**How to Upload:**
+1. Look for the "Upload Documents" section on the left
+2. Either:
+   - **Drag and drop** PDF files into the dashed box
+   - Click **"Browse Files"** button to select files
+3. You'll see selected files listed below
+4. Click **"Upload & Process Documents"**
+5. Wait for the green success message
+
+**Tips:**
+- Only PDF files are supported
+- Maximum file size: 10MB recommended
+- Multiple files can be uploaded at once
+- Files with selectable text work best (not scanned images)
+
+### 2. Asking Questions
+Query your uploaded documents using natural language.
+
+**How to Ask Questions:**
+1. Look for the "Ask Questions" section on the right
+2. Type your question in the text box
+3. Either:
+   - Click **"Ask Question"** button
+   - Press **Enter** key (Shift+Enter for new line)
+4. Wait a few seconds for processing
+5. View the answer in the "Response" section below
+
+**Example Questions:**
