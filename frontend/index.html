@@ -294,7 +294,9 @@
     </div>
 
     <script>
-        const API_BASE_URL = 'http://localhost:8000';
+        const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:8000' 
+  : 'https://your-actual-backend-url.onrender.com';
         let selectedFiles = [];
 
         const dropZone = document.getElementById('dropZone');
