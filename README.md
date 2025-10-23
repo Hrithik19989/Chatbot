@@ -161,6 +161,193 @@ chatbot/
   |-- frontend/
       |-- index.html             (Web interface)
 
+DEPLOYING TO THE INTERNET
+Want to make your app accessible online? Deploy it to Render for FREE!
+WHAT YOU'LL NEED
+
+GitHub account (free)
+Render account (free, no credit card needed)
+Your project code pushed to GitHub
+About 30-45 minutes
+
+STEP 1: Prepare Your Project Files
+Create these new files in your main project folder:
+
+Create "runtime.txt":
+python-3.11.0
+Create "Procfile" (no file extension):
+web: uvicorn main:app --host 0.0.0.0 --port $PORT
+Add to end of "requirements.txt":
+gunicorn==21.2.0
+Create ".gitignore":
+pycache/
+*.py[cod]
+venv/
+.env
+.venv
+*.log
+chromadb/
+
+STEP 2: Update Code for Production
+Update main.py - Find the CORS section and replace with:
+import os
+FRONTEND_URL = os.getenv("FRONTEND_URL", "*")
+app.add_middleware(
+CORSMiddleware,
+allow_origins=[""] if FRONTEND_URL == "" else [FRONTEND_URL],
+allow_credentials=True,
+allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+allow_headers=[""],
+expose_headers=[""]
+)
+Update frontend/index.html - Find this line:
+const API_BASE_URL = 'http://localhost:8000';
+Replace with:
+const API_BASE_URL = window.location.hostname === 'localhost'
+? 'http://localhost:8000'
+: 'https://YOUR-BACKEND-URL.onrender.com';
+STEP 3: Push to GitHub
+Install Git if needed: https://git-scm.com/downloads
+Run these commands in your project folder:
+git init
+git add .
+git commit -m "Prepare for deployment"
+Create repository on GitHub:
+
+Go to https://github.com
+Click "+" → "New repository"
+Name: rag-chatbot
+Keep it Public
+Click "Create repository"
+
+Push your code:
+git remote add origin https://github.com/YOUR_USERNAME/rag-chatbot.git
+git branch -M main
+git push -u origin main
+STEP 4: Deploy Backend to Render
+Create Render account:
+
+Visit: https://render.com
+Sign up with GitHub (easiest)
+Verify your email
+
+Deploy backend:
+
+Click "New +" → "Web Service"
+Connect to GitHub and select your repository
+Configure:
+Name: rag-chatbot-backend
+Region: Choose closest to you
+Branch: main
+Runtime: Python 3
+Build Command: pip install -r requirements.txt
+Start Command: uvicorn main:app --host 0.0.0.0 --port $PORT
+Instance Type: Free
+Add Environment Variables:
+GOOGLE_API_KEY = your_actual_api_key
+FRONTEND_URL = *
+PYTHON_VERSION = 3.11.0
+Click "Create Web Service"
+Wait 5-10 minutes for deployment
+Copy your backend URL (like: https://rag-chatbot-backend.onrender.com)
+
+Test backend:
+Visit: https://your-backend-url.onrender.com
+Should see: {"status": "API is running"}
+STEP 5: Deploy Frontend to Render
+Update frontend code with backend URL:
+
+Edit frontend/index.html
+Replace YOUR-BACKEND-URL with actual URL from Step 4
+Save file
+
+Push changes:
+git add frontend/index.html
+git commit -m "Add production backend URL"
+git push
+Deploy frontend:
+
+In Render dashboard, click "New +" → "Static Site"
+Select same GitHub repository
+Configure:
+Name: rag-chatbot-frontend
+Branch: main
+Root Directory: (leave blank)
+Build Command: (leave blank)
+Publish Directory: ./frontend
+Click "Create Static Site"
+Wait 2-3 minutes
+Copy your frontend URL
+
+Update backend CORS:
+
+Go to backend service in Render
+Click "Environment"
+Update FRONTEND_URL to your frontend URL
+Save (backend will auto-redeploy)
+
+STEP 6: Test Your Deployed App
+Visit your frontend URL and test:
+✓ Page loads correctly
+✓ Upload a small PDF
+✓ Ask a question
+✓ Verify answer appears
+Check browser console (F12) for any errors
+IMPORTANT NOTES FOR DEPLOYED APP
+Cold Starts:
+
+Free Render services sleep after 15 minutes of inactivity
+First request after sleep takes 30-60 seconds to wake up
+Subsequent requests are fast
+This is normal for free tier
+
+Limitations:
+
+750 hours per month (enough for one service always running)
+512 MB RAM
+Services may be slower than local
+Large PDFs may timeout
+
+If Something Goes Wrong:
+
+Check Render logs: Service → Logs tab
+Verify environment variables are set correctly
+Check CORS settings match frontend URL
+Ensure backend shows "Live" status
+
+UPGRADING TO PAID (Optional)
+If you need:
+
+No cold starts (instant responses)
+More memory for large PDFs
+Faster processing
+Higher reliability
+
+Consider Render paid plan ($7/month):
+
+Always-on service
+2GB RAM
+Better performance
+
+YOUR DEPLOYED URLS
+After deployment, save these:
+Backend API:  https://.onrender.com
+Frontend App: https://.onrender.com
+Share your frontend URL with anyone to let them use your app!
+===============================================================================
+FUTURE IMPROVEMENTS
+Planned features:
+
+Support for Word documents and text files
+Multiple language support
+Conversation history
+Document management (delete, view uploaded docs)
+Export answers to PDF
+User authentication
+Advanced search filters
+Custom domain support
+Usage analytics
+
 ===============================================================================
                           TROUBLESHOOTING
 ===============================================================================
