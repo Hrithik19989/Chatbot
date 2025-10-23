@@ -262,7 +262,7 @@
                     </button>
                     <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.txt,.doc,.docx">
                     <p style="margin-top: 15px; color: #666; font-size: 0.9em;">
-                        Supported: PDF, TXT, DOC, DOCX
+                        Supported: PDF Only
                     </p>
                 </div>
                 <div class="file-list" id="fileList"></div>
@@ -294,7 +294,7 @@
     </div>
 
     <script>
-        const API_BASE_URL = 'http://localhost:8080';
+        const API_BASE_URL = 'http://localhost:8000';
         let selectedFiles = [];
 
         const dropZone = document.getElementById('dropZone');

@@ -1,0 +1,13 @@
+pycache/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.env
+.venv
+*.log
+.DS_Store
+chromadb/
