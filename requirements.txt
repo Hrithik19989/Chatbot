@@ -24,6 +24,8 @@ python-multipart
 # --- New addition for .env file support ---
 python-dotenv
 
+gunicorn
+
 
 
 

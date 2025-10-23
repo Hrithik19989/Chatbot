@@ -27,13 +27,13 @@ chatbot = RAGChatbot(google_api_key=api_key)
 print("Chatbot initialized successfully.")
 
 # Add CORS middleware BEFORE defining routes
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for development
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+#app.add_middleware(
+#    CORSMiddleware,
+ #   allow_origins=["*"],  # Allow all origins for development
+  #  allow_credentials=True,
+   # allow_methods=["*"],
+    #allow_headers=["*"],
+#)
 
 # Pydantic Models
 class QueryRequest(BaseModel):
